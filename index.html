@@ -308,8 +308,12 @@ const CU3000_IMG='data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAQDAwM
     renderCalendar(entry? entry.dates : []);
     markPastSlots();
     const _k=((entry&&entry.em)||'')+'\t'+name;
-    const _m=COMPLETIONS.filter(c=>c.keys[_k]);
-    if(_m.length){
+    const _today0=new Date(); _today0.setHours(0,0,0,0);
+    const _yday=new Date(_today0); _yday.setDate(_yday.getDate()-1);
+    const _pad2=n=>String(n).padStart(2,'0');
+    const _ydayStr=`${_yday.getFullYear()}-${_pad2(_yday.getMonth()+1)}-${_pad2(_yday.getDate())}`;
+    const _gotYesterday = COMPLETIONS.some(c=>c.date===_ydayStr && c.keys[_k]);
+    if(_gotYesterday){
       const _dayNum=Math.max(1, Math.floor((new Date() - new Date('2026-08-22T00:00'))/86400000)+1);
       $('day2msg').innerHTML=`<b>${name} 파트너스님</b>, 약속 지켜줘서 고마워요!<br>오늘은 챌린지 <b>${_dayNum}일차</b>예요. 오늘도 저와 약속한 시간에 학습하시길 꼭 부탁드려요!<br>파트너스님의 합격을 응원할게요!`;
       $('day2Modal').classList.add('show');
